@@ -5,14 +5,12 @@ from App.database import db
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username =  db.Column(db.String, nullable=False, unique=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     access = db.Column(db.String(120), nullable=False)
     comps = db.relationship("Competition",backref="user", lazy=True, cascade = "all, delete-orphan")
 
-    def __init__(self, username, email,password,access):
+    def __init__(self, username, password,access):
         self.username = username
-        self.email = email
         self.set_password(password)
         self.access = access
 
