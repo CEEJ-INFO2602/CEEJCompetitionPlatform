@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
 from flask_login import login_required, login_user, current_user, logout_user
+from App.models import User
 
 from.index import index_views
 
@@ -28,13 +29,19 @@ def identify_page():
     return jsonify({'message': f"username: {current_user.username}, id : {current_user.id}"})
 
 
-@auth_views.route('/login', methods=['POST'])
+@auth_views.route('/render_login', methods=['GET'])
+def render_login():
+    return render_template('loginPage.html')
+
+@auth_views.route('/login_action', methods=['GET', 'POST'])
 def login_action():
     data = request.form
     user = login(data['username'], data['password'])
     if user:
         login_user(user)
-        return 'user logged in!'
+        flash('Logged in successfully.')
+        return render_template('competitionsPage.html')
+    
     return 'bad username or password given', 401
 
 @auth_views.route('/logout', methods=['GET'])
@@ -42,6 +49,41 @@ def logout_action():
     data = request.form
     user = login(data['username'], data['password'])
     return 'logged out!'
+
+@auth_views.route('/signUp', methods=['GET'])
+def signUp():
+    return render_template('signUpPage.html')
+
+@auth_views.route('/signUp_action', methods=['GET', 'POST'])
+def signUp_action():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirmPassword = request.form.get('confirmPassword')
+
+        if (password != confirmPassword):
+            flash('Passwords do not match')
+            return render_template('signUpPage.html')
+
+
+        # Check if username already exists
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash('Username Already Taken!!!!!!')
+            return render_template('signUpPage.html')
+
+        # Create a new user & Save the new user to the database
+        create_user(username, password, access ="user")
+
+        # Log in the user
+        user=login(username, password)
+
+        login_user(user)
+        flash('Logged in successfully.')
+        return render_template('competitionsPage.html')
+
+    flask('ERROR SIGNING UP!')
+    return render_template('signUpPage.html')
 
 '''
 API Routes
