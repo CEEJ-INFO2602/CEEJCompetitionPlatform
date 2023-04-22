@@ -1,18 +1,17 @@
 from App.models import User
 from App.database import db
 
-def create_user(username, email, password, access ="user"):
-    user1 = get_user_by_email(email)
-    user2 = get_user_by_username(username)
-    if user1 or user2:
+def create_user(username, password, access ="user"):
+    user = get_user_by_username(username)
+    if user:
         return None
-    new_user = User(username = username, email = email, password = password, access = access)
+    new_user = User(username = username, password = password, access = access)
     db.session.add(new_user)
     db.session.commit()
     return new_user
 
-def create_admin(username, email, password):
-    return create_user(username, email, password, "admin")
+def create_admin(username, password):
+    return create_user(username, password, "admin")
 
 def update_access(id, access):
     user = get_user_by_id(id)
@@ -22,9 +21,6 @@ def update_access(id, access):
         db.session.commit()
         return user
     return None
-
-def get_user_by_email(email):
-    return User.query.filter_by(email=email).first()
 
 def get_user_by_username(username):
     user = User.query.filter_by(username=username).first()
@@ -47,13 +43,11 @@ def get_all_admins():
 def get_all_admins_json():
     return [admin.to_json() for admin in get_all_admins()]
   
-def update_user(id, username="", email="", password=""):
+def update_user(id, username="",password=""):
     user = get_user_by_id(id)
     if user:
         if username:
             user.username = username
-        if email:
-            user.email = email
         if password:
             user.set_password(password)
         db.session.add(user)
@@ -79,7 +73,7 @@ def delete_user(id):
 def create_su():
     user = get_user_by_username("admin123")
     if not user:
-        user = create_admin("admin123", "admin123@gmail.com", "admin123")
+        user = create_admin("admin123","admin123")
         print("admin created")
         db.session.add(user)
         return db.session.commit()
