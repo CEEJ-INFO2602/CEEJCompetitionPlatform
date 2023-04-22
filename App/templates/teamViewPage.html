@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}CEEJ Team View Page{% endblock %}
+{% block page %}Team View Page{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+  <div class="competitionspan">
+    <span>Teams</span>
+  </div>
+  <div class="filter-container">
+    <button class="filter-buttons1">Filter 1</button>
+    <button class="filter-buttons2">Filter 2</button>
+  </div> 
+  <div>
+      <input type="text" class="search-bar" placeholder="Search">
+      <button class="searchButton">Search</button>
+  </div>
+  <div class="sidebar">
+    <!-- Add your sidebar content here -->
+    <ul>
+      <!-- Use Jinja for username here -->
+      <li class="usernameSidebar"><a href="">user</a></li> 
+      <li class="logoutSidebar"><a href="index.html">Logout</a></li>
+    </ul>
+  </div>
+  <div class="contents" id="table-container">
+    <!-- Table will be dynamically appended here -->
+    <table>
+      <thead>
+        <tr>
+          <th>Team Name</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+      {%for t in teams%}
+        <tr>
+          
+            <td><a class = "viewTeamButton"href="participantViewPage.html">{{t.teamName}}</a></td>
+            <td>{{t.score}}</td>
+        </tr>
+      {%endfor%}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

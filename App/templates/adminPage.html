@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %}CEEJ Admin Home Page{% endblock %}
+{% block page %}Admin Home Page{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+  <!-- Add the Competitions span under the nav bar -->
+  <div class="competitionspan">
+    <span>Competitions (Admin)</span>
+  </div>
+  <div class="filter-container">
+    <button class="filter-buttons1">Filter 1</button>
+    <button class="filter-buttons2">Filter 2</button>
+    <a class="add-button" href="createCompetitionPage.html"> Add Competition</a>
+  </div> 
+  <div>
+      <input type="text" class="search-bar" placeholder="Search">
+<!--       <button class="search-button">Search</button> -->
+  </div>
+  <div class="sidebar">
+    <!-- Add your sidebar content here -->
+    <ul>
+      <!-- Use Jinja for username here -->
+      <li class="usernameSidebar"><a href="adminPage">{{ username }}</a></li>
+      <li class="logoutSidebar"><a href="index.html">Logout</a></li>
+    </ul>
+  </div>
+  <div class="content" id="card-container">
+    <!-- Cards will be dynamically appended here -->
+    {%for c in competitions%}
+      <a href="teamViewPage.html" class="card"> <!-- add the link to the "teamViewPage.html" page -->
+        <div class="card-text">
+          <div class="card-left">
+            <h3>{{c.compName}}</h3>
+            <p>{{c.id}}</p>
+            <p>{{c.startDate}}</p>
+            <p>{{c.endDate}}</p>
+          </div>
+          <div class="card-right">
+            <button class="competition-buttons1">Update Competition</button>
+            <button class="competition-buttons2">Delete Competition</button>
+          </div>
+        </div>
+      </a>
+    {%endfor%}
+  </div>
+{% endblock %}
