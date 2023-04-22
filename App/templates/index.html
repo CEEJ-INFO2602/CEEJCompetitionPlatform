@@ -1,10 +1,23 @@
 {% extends "layout.html" %}
-{% block title %}Flask MVC App{% endblock %}
-{% block page %}Flask MVC App{% endblock %}
+{% block title %}CEEJ Landing Page{% endblock %}
+{% block page %}Landing Page{% endblock %}
 
 {{ super() }}
 
 {% block content %}
-    <h1>Flask MVC</h1>
-    <p>This is a boileplate flask application which follows the MVC pattern for structuring the project.</p>
+    <div class="center">
+			<img src="../static/images/CEEJ Landing Page gif.gif" alt="Landing Image">
+		</div>
+    <!-- this is the login button-->
+      <div class="login_button">
+        <a href="{{ url_for('login') }}">Login</a>
+      </div>
+    
+    <div class="text">
+      <p>Don't have an account?</p>
+    </div>
+    <!-- this is the signup button-->
+      <div class="signup_button">
+        <a href="{{ url_for('signUp') }}">SignUp</a>
+      </div>
 {% endblock %}
