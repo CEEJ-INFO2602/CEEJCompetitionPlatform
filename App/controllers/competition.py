@@ -53,6 +53,11 @@ def get_end_date(id):
     competition = Competition.query.get(id)
     return competition.endDate
 
+#Function to order competitions by start date
+def get_all_competitions_by_start_date():
+    competitions = Competition.query.order_by(Competition.startDate).all()
+    return competitions
+
 def update_competition(id,adminId,compName,startDate,endDate):
     competition = get_competition_by_id(id)
     if competition:
