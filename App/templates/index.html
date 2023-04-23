@@ -12,7 +12,7 @@
 		</div>
     <!-- this is the login button-->
       <div class="login_button">
-        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('auth_views.render_login') }}">Login</a>
       </div>
     
     <div class="text">
@@ -20,6 +20,6 @@
     </div>
     <!-- this is the signup button-->
       <div class="signup_button">
-        <a href="{{ url_for('signUp') }}">SignUp</a>
+        <a href="{{ url_for('auth_views.render_signUp') }}">SignUp</a>
       </div>
 {% endblock %}

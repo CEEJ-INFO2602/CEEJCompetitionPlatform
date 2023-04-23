@@ -21,7 +21,7 @@
     <ul>
       <!-- Use Jinja for username here -->
       <li class="usernameSidebar"><a href="">user</a></li> 
-      <li class="logoutSidebar"><a href="index.html">Logout</a></li>
+      <li class="logoutSidebar"><a action="{{ url_for('auth_views.logout_action') }}">Logout</a></li>
     </ul>
   </div>
   <div class="contents" id="table-container">

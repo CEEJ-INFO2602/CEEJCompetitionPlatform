@@ -7,13 +7,18 @@ class User(db.Model):
     username =  db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String(120), nullable=False)
     access = db.Column(db.String(120), nullable=False)
+    is_active = db.Column(db.Boolean, nullable=False)
     comps = db.relationship("Competition",backref="user", lazy=True, cascade = "all, delete-orphan")
 
     def __init__(self, username, password,access):
         self.username = username
         self.set_password(password)
         self.access = access
+        self.is_active = False
 
+    def get_id(self):
+        return str(self.id)
+        
     def to_json(self):
         return{
             "id": self.id,
