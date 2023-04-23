@@ -2,6 +2,7 @@ import click, pytest, sys
 from flask import Flask
 from flask.cli import with_appcontext, AppGroup
 import os
+import csv
 from datetime import datetime
 from App.database import db
 from App.models import Competition, Team, Member
@@ -17,6 +18,8 @@ from App.controllers import ( create_user, get_all_users_json, get_all_users, cr
 app = create_app()
 migrate = get_migrate(app)
 
+app.config['UPLOAD_FOLDER'] = 'App/uploads'
+
 # This command creates and initializes the database
 @app.cli.command("init", help="Creates and initializes the database")
 def initialize():
@@ -25,6 +28,39 @@ def initialize():
     create_admin('bob', 'bobpass')
     create_user('pam', 'pampass')
     print('database intialized')
+
+    comp_name = 'Animal competition'
+    start_date = datetime.strptime('23/04/2023', '%d/%m/%Y').date()
+    end_date = datetime.strptime('23/05/2023', '%d/%m/%Y').date()
+
+    csv_file_path = os.path.join(UPLOAD_FOLDER, 'Animal competition.csv')
+    if  os.path.exists(csv_file_path):
+        process_csv_file(csv_file_path, comp_name, start_date, end_date)
+
+
+def process_csv_file(file_path, comp_name, start_date, end_date):
+    admin_id = 1  
+    competition = Competition(admin_id, comp_name, start_date, end_date)
+    db.session.add(competition)
+    db.session.flush()
+
+    competition.id = 1
+    with open(file_path) as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+
+        for row in csv_reader:
+            team_name = row['Team']
+            score = row['Score']
+            team = Team(competition.id, admin_id, team_name, score)
+            db.session.add(team)
+            db.session.flush()
+
+            participants = row['Participants'].split(", ")
+            for participant in participants:
+                member = Member(team.id, admin_id, participant)
+                db.session.add(member)
+
+    db.session.commit()
 
 '''
 User Commands
