@@ -182,14 +182,10 @@ def process_csv_file(file_path, comp_name, start_date, end_date):
         for row in csv_reader:
             team_name = row['Team']
             score = row['Score']
-            team = Team(competition.id, admin_id, team_name, score)
+            members = members['Participants']
+            team = Team(competition.id, admin_id, team_name, score, members)
             db.session.add(team)
             db.session.flush()
-
-            participants = row['Participants'].split(", ")
-            for participant in participants:
-                member = Member(team.id, admin_id, participant)
-                db.session.add(member)
 
     db.session.commit()
 
@@ -224,8 +220,7 @@ def teamViewPage(competition_id):
 @auth_views.route('/participantViewPage/<int:team_id>')
 def participantViewPage(team_id):
     team = Team.query.filter_by(id=team_id).first()
-    members = Member.query.filter_by(teamId=team_id).first()
-    return render_template('participantViewPage.html', team=team, members=members)
+    return render_template('participantViewPage.html', team=team)
 
 '''
 API Routes

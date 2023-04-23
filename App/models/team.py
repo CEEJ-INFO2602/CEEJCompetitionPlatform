@@ -7,13 +7,14 @@ class Team(db.Model):
     adminId = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     teamName = db.Column(db.String(120), nullable=False)
     score = db.Column(db.String(120), nullable = False)
-    members = db.relationship('Member', backref='team', lazy=True, cascade="all, delete-orphan")
+    members = db.Column(db.String(200), nullable = False)
     
-    def __init__(self, competitionId, adminId, teamName, score):
+    def __init__(self, competitionId, adminId, teamName, score, members):
         self.competitionId = competitionId
         self.adminId = adminId
         self.teamName = teamName
         self.score = score
+        self.members = members
 
     def to_json(self):
         return{
@@ -22,5 +23,5 @@ class Team(db.Model):
             "adminId": self.adminId,
             "teamName": self.teamName,
             "score": self.score,
-            "members": [member.to_json() for member in self.members],   
+            "members": self.members
         }
