@@ -11,7 +11,9 @@ from App.controllers import (
     login, 
     get_active_user,
     set_active_true,
-    set_active_false
+    set_active_false,
+    get_all_competitions,
+    is_admin
 )
 
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
@@ -43,7 +45,11 @@ def login_action():
     if user:
         login_user(user)
         set_active_true(user)
-        return render_template('competitionsPage.html'), 200
+
+        if is_admin(user):
+            return redirect('/render_adminPage'), 200
+
+        return redirect('/render_competitionsPage'), 200
     
     flash('bad username or password given')
     return render_template('loginPage.html'), 401
@@ -83,7 +89,11 @@ def signUp_action():
 
         login_user(user)
         set_active_true(user)
-        return render_template('competitionsPage.html'), 200
+
+        if is_admin(user):
+            return redirect('/render_adminPage'), 200
+
+        return redirect('/render_competitionsPage'), 200
 
     flask('ERROR SIGNING UP!')
     return render_template('signUpPage.html'), 401
@@ -94,11 +104,37 @@ def active_user():
     return username
 
 
-@auth_views.route('/competitionsPage', methods=['GET', 'POST'])
-def competitionsPage():
-    username = get_active_user()
-    return render_template('competitionsPage.html', username=username)
+@auth_views.route('/render_competitionsPage', methods=['GET', 'POST'])
+def render_competitionsPage():
+    competitions = get_all_competitions()
+    return render_template('competitionsPage.html', competitions=competitions)
 
+
+@auth_views.route('/render_adminPage', methods=['GET', 'POST'])
+def render_adminPage():
+    competitions = get_all_competitions()
+    return render_template('adminPage.html', competitions=competitions)
+
+@auth_views.route('/sort_competitions_by_name_action_admin', methods=['GET', 'POST'])
+def sort_competitions_by_name_action_admin():
+    competitions = get_all_competitions_by_alphabet()
+    return render_template('adminPage.html', competitions=competitions)
+
+@auth_views.route('/sort_competitions_by_date_action_admin', methods=['GET', 'POST'])
+def sort_competitions_by_date_action_admin():
+    competitions = get_all_competitions_by_start_date()
+    return render_template('adminPage.html', competitions=competitions)  
+
+@auth_views.route('/sort_competitions_by_name_action', methods=['GET', 'POST'])
+def sort_competitions_by_name_action():
+    competitions = get_all_competitions_by_alphabet()
+    return render_template('competitionsPage.html', competitions=competitions)
+
+@auth_views.route('/sort_competitions_by_date_action', methods=['GET', 'POST'])
+def sort_competitions_by_date_action():
+    competitions = get_all_competitions_by_start_date()
+    return render_template('competitionsPage.html', competitions=competitions) 
+   
 
 '''
 API Routes
