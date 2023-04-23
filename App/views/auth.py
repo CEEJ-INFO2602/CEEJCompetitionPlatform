@@ -215,7 +215,17 @@ def delete_competition(comp_id):
     else:
         return f"Competition with ID {comp_id} not found"
 
+@auth_views.route('/teamViewPage/<int:competition_id>')
+def teamViewPage(competition_id):
+    competition = Competition.query.filter_by(id=competition_id).first()
+    teams = competition.teams
+    return render_template('teamViewPage.html', teams=teams)
 
+@auth_views.route('/participantViewPage/<int:team_id>')
+def participantViewPage(team_id):
+    team = Team.query.filter_by(id=team_id).first()
+    members = Member.query.filter_by(teamId=team_id).first()
+    return render_template('participantViewPage.html', team=team, members=members)
 
 '''
 API Routes
