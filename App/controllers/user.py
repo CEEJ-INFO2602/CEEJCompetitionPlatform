@@ -5,7 +5,7 @@ def get_active_user():
     allUsers = User.query.all()
     for u in allUsers:
         if (u.is_active == True):
-            return u.username
+            return u
     return "no hehe"
 
 def create_user(username, password, access ="user"):

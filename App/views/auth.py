@@ -50,7 +50,6 @@ def login_action():
 
 @auth_views.route('/logout_action')
 def logout_action():
-    set_active_false(user)
     logout_user()
     return render_template('index.html')
 
