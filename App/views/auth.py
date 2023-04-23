@@ -22,7 +22,9 @@ from App.controllers import (
     set_active_true,
     set_active_false,
     get_all_competitions,
-    is_admin
+    is_admin,
+    get_all_competitions_by_alphabet,
+    get_all_competitions_by_start_date
 )
 
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
