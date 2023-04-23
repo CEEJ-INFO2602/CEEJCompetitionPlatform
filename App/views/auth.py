@@ -171,7 +171,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] == 'csv'
 
 def process_csv_file(file_path, comp_name, start_date, end_date):
-    admin_id = 1  # Replace with the admin ID for the competition
+    admin_id = 1  
     competition = Competition(admin_id, comp_name, start_date, end_date)
     db.session.add(competition)
     db.session.flush()
@@ -192,6 +192,28 @@ def process_csv_file(file_path, comp_name, start_date, end_date):
                 db.session.add(member)
 
     db.session.commit()
+
+@auth_views.route('/delete_competition/<int:comp_id>', methods=['POST'])
+def delete_competition(comp_id):
+    # Check for CSRF token
+    try:
+        validate_csrf(request.form.get('csrf_token'))
+    except ValidationError:
+        return abort(400)
+
+    competition = Competition.query.filter_by(id=comp_id).first()
+    if competition:
+        db.session.delete(competition)
+        db.session.commit()
+
+        # Delete the CSV file for the competition
+        csv_file_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{comp_id}.csv")
+        if os.path.exists(csv_file_path):
+            os.remove(csv_file_path)
+
+        return f"Competition with ID {comp_id} deleted successfully"
+    else:
+        return f"Competition with ID {comp_id} not found"
 
 
 
