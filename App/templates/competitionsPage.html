@@ -30,10 +30,10 @@
     {%for c in competitions%}
       <a href="teamViewPage.html" class="card"> <!-- add the link to the "teamViewPage.html" page -->
         <div class="card-text">
-          <h3>{{c.compName}}</h3>
-          <p>{{c.id}}</p>
-          <p>{{c.startDate}}</p>
-          <p>{{c.endDate}}</p>
+          <h3>Competition Code: {{c.compName}}</h3>
+          <p>Competition ID: {{c.id}}</p>
+          <p>Competition Start Date: {{c.startDate}}</p>
+          <p>Competition End Date: {{c.endDate}}</p>
         </div>
       </a>
     {%endfor%}
