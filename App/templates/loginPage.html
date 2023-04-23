@@ -18,12 +18,22 @@
       
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" placeholder="Enter your password" required>
-      
+        
+        {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flashes">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+
         <input type="submit" value="Login">
       
         <div class="login_signup_button">
           <div class="text">Don't have an account?</div>
-          <a href="{{ url_for('auth_views.signUp') }}">SignUp</a>
+          <a href="{{ url_for('auth_views.render_signUp') }}">SignUp</a>
         </div>
       </form>      
     </div>

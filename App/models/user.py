@@ -14,7 +14,7 @@ class User(db.Model):
         self.username = username
         self.set_password(password)
         self.access = access
-        self.is_active = True
+        self.is_active = False
 
     def get_id(self):
         return str(self.id)
