@@ -33,6 +33,11 @@ def get_competition_by_name(name):
     competition = Competition.query.filter_by(name = name).first()
     return competition
 
+#Function to get competitions in alphabetical order
+def get_all_competitions_by_alphabet():
+    competitions = Competition.query.order_by(Competition.compName).all()
+    return competitions
+
 #Function to get competition by name in json format
 def get_competition_by_name_json(name):
     competitions = Competition.query.filter_by(name = name).first()
