@@ -15,6 +15,14 @@ def login(username, password):
         return user
     return None
 
+def set_active_true(user):
+    user.is_active == True
+    return None
+
+def set_active_false(user):
+    user.is_active == False
+    return None
+
 def setup_flask_login(app):
     login_manager = LoginManager()
     login_manager.init_app(app)

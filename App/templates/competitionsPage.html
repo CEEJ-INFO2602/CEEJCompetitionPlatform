@@ -21,8 +21,8 @@
     <!-- Add your sidebar content here -->
     <ul>
       <!-- Use Jinja for username here -->
-      <li class="usernameSidebar"><a href="competitionsPage">{{username}}</a></li> 
-      <li class="logoutSidebar"><a href="index.html">Logout</a></li>
+      <li class="usernameSidebar"><a href="{{ url_for('auth_views.active_user') }}">Username</a></li> 
+      <li class="logoutSidebar"><a href="{{ url_for('auth_views.logout_action') }}">Logout</a></li>
     </ul>
   </div>
   <div class="content" id="card-container">
