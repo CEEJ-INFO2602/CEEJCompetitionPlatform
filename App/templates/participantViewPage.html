@@ -19,12 +19,11 @@
       <button class="searchButton">Search</button>
   </div>
   <div class="sidebar">
-    <!-- Add your sidebar content here -->
-    <ul>
-      <!-- Use Jinja for username here -->
-      <li class="usernameSidebar"><a href="">username</a></li> 
-      <li class="logoutSidebar"><a action="{{ url_for('auth_views.logout_action') }}">Logout</a></li>
-    </ul>
+        <!-- Add your sidebar content here -->
+        <ul>
+          <li class="usernameSidebar"><a href="{{ url_for('auth_views.render_competitionsPage') }}">Home</a></li>
+          <li class="logoutSidebar"><a href="{{ url_for('auth_views.logout_action') }}">Logout</a></li>
+        </ul>
   </div>
   <div class="contents" id="table-container">
     <!-- Table will be dynamically appended here -->
@@ -35,11 +34,9 @@
         </tr>
       </thead>
       <tbody>
-        {%for p in participants%}
         <tr>
-          <td>p.name</td>
+          <td>{{team.members}}</td>
         </tr>
-        {%endfor%}
       </tbody>
     </table>
   </div>

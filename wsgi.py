@@ -32,8 +32,21 @@ def initialize():
     comp_name = 'Animal competition'
     start_date = datetime.strptime('23/04/2023', '%d/%m/%Y').date()
     end_date = datetime.strptime('23/05/2023', '%d/%m/%Y').date()
-
     csv_file_path = os.path.join(UPLOAD_FOLDER, 'Animal competition.csv')
+    if  os.path.exists(csv_file_path):
+        process_csv_file(csv_file_path, comp_name, start_date, end_date)
+
+    comp_name = 'Colors competition'
+    start_date = datetime.strptime('23/04/2023', '%d/%m/%Y').date()
+    end_date = datetime.strptime('23/05/2023', '%d/%m/%Y').date()
+    csv_file_path = os.path.join(UPLOAD_FOLDER, 'Colors competition.csv')
+    if  os.path.exists(csv_file_path):
+        process_csv_file(csv_file_path, comp_name, start_date, end_date)
+
+    comp_name = 'IT competition'
+    start_date = datetime.strptime('23/04/2023', '%d/%m/%Y').date()
+    end_date = datetime.strptime('23/05/2023', '%d/%m/%Y').date()
+    csv_file_path = os.path.join(UPLOAD_FOLDER, 'IT competition.csv')
     if  os.path.exists(csv_file_path):
         process_csv_file(csv_file_path, comp_name, start_date, end_date)
 
@@ -44,21 +57,16 @@ def process_csv_file(file_path, comp_name, start_date, end_date):
     db.session.add(competition)
     db.session.flush()
 
-    competition.id = 1
     with open(file_path) as csv_file:
         csv_reader = csv.DictReader(csv_file)
 
         for row in csv_reader:
             team_name = row['Team']
             score = row['Score']
-            team = Team(competition.id, admin_id, team_name, score)
+            members = row['Participants']
+            team = Team(competition.id, admin_id, team_name, score, members)
             db.session.add(team)
             db.session.flush()
-
-            participants = row['Participants'].split(", ")
-            for participant in participants:
-                member = Member(team.id, admin_id, participant)
-                db.session.add(member)
 
     db.session.commit()
 
