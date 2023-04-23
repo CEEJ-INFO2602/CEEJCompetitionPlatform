@@ -10,9 +10,9 @@
     <span>Competitions</span>
   </div>
   <div class="filter-container">
-    <button class="filter-buttons1">Filter 1</button>
-    <button class="filter-buttons2">Filter 2</button>
-  </div> 
+    <button class="filter-buttons1">Alphabetical</button>
+    <button class="filter-buttons2">Date</button>
+  </div>  
   <div>
       <input type="text" class="search-bar" placeholder="Search">
       <button class="searchButton">Search</button>
@@ -21,7 +21,7 @@
     <!-- Add your sidebar content here -->
     <ul>
       <!-- Use Jinja for username here -->
-      <li class="usernameSidebar"><a href="{{ url_for('auth_views.active_user') }}">Username</a></li> 
+      <li class="usernameSidebar"><a href="{{ url_for('auth_views.render_competitionsPage') }}">Home</a></li> 
       <li class="logoutSidebar"><a href="{{ url_for('auth_views.logout_action') }}">Logout</a></li>
     </ul>
   </div>
@@ -30,10 +30,10 @@
     {%for c in competitions%}
       <a href="teamViewPage.html" class="card"> <!-- add the link to the "teamViewPage.html" page -->
         <div class="card-text">
-          <h3>{{c.compName}}</h3>
-          <p>{{c.id}}</p>
-          <p>{{c.startDate}}</p>
-          <p>{{c.endDate}}</p>
+          <h3>Competition Code: {{c.compName}}</h3>
+          <p>Competition ID: {{c.id}}</p>
+          <p>Competition Start Date: {{c.startDate}}</p>
+          <p>Competition End Date: {{c.endDate}}</p>
         </div>
       </a>
     {%endfor%}

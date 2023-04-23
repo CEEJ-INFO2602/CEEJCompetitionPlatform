@@ -1,10 +1,16 @@
 import click, pytest, sys
 from flask import Flask
 from flask.cli import with_appcontext, AppGroup
+import os
+from datetime import datetime
+from App.database import db
+from App.models import Competition, Team, Member
+
+UPLOAD_FOLDER = 'App/uploads'
 
 from App.database import db, get_migrate
 from App.main import create_app
-from App.controllers import ( create_user, get_all_users_json, get_all_users )
+from App.controllers import ( create_user, get_all_users_json, get_all_users, create_admin )
 
 # This commands file allow you to create convenient CLI commands for testing controllers
 
@@ -14,9 +20,10 @@ migrate = get_migrate(app)
 # This command creates and initializes the database
 @app.cli.command("init", help="Creates and initializes the database")
 def initialize():
-    db.drop_all()
+    #db.drop_all()
     db.create_all()
-    create_user('bob', 'bobpass')
+    create_admin('bob', 'bobpass')
+    create_user('pam', 'pampass')
     print('database intialized')
 
 '''

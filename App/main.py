@@ -10,6 +10,9 @@ from datetime import timedelta
 from App.database import init_db
 from App.config import config
 
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'App/uploads'
+
 from App.controllers import (
     setup_jwt,
     setup_flask_login

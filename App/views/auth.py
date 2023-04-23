@@ -1,7 +1,16 @@
+from flask import Flask
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
 from flask_login import login_required, login_user, current_user, logout_user
 from App.models import User
+import csv
+from datetime import datetime
+from App.database import db
+from App.models import Competition, Team, Member
+import os
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'App/uploads'
 
 from.index import index_views
 
@@ -11,7 +20,9 @@ from App.controllers import (
     login, 
     get_active_user,
     set_active_true,
-    set_active_false
+    set_active_false,
+    get_all_competitions,
+    is_admin
 )
 
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
@@ -43,14 +54,17 @@ def login_action():
     if user:
         login_user(user)
         set_active_true(user)
-        return render_template('competitionsPage.html'), 200
+
+        if is_admin(user):
+            return redirect('/render_adminPage'), 200
+
+        return redirect('/render_competitionsPage'), 200
     
     flash('bad username or password given')
     return render_template('loginPage.html'), 401
 
 @auth_views.route('/logout_action')
 def logout_action():
-    set_active_false(user)
     logout_user()
     return render_template('index.html')
 
@@ -84,7 +98,11 @@ def signUp_action():
 
         login_user(user)
         set_active_true(user)
-        return render_template('competitionsPage.html'), 200
+
+        if is_admin(user):
+            return redirect('/render_adminPage'), 200
+
+        return redirect('/render_competitionsPage'), 200
 
     flask('ERROR SIGNING UP!')
     return render_template('signUpPage.html'), 401
@@ -95,10 +113,108 @@ def active_user():
     return username
 
 
-@auth_views.route('/competitionsPage', methods=['GET', 'POST'])
-def competitionsPage():
-    username = get_active_user()
-    return render_template('competitionsPage.html', username=username)
+@auth_views.route('/render_competitionsPage', methods=['GET', 'POST'])
+def render_competitionsPage():
+    competitions = get_all_competitions()
+    return render_template('competitionsPage.html', competitions=competitions)
+
+
+@auth_views.route('/render_adminPage', methods=['GET', 'POST'])
+def render_adminPage():
+    competitions = get_all_competitions()
+    return render_template('adminPage.html', competitions=competitions)
+
+@auth_views.route('/sort_competitions_by_name_action_admin', methods=['GET', 'POST'])
+def sort_competitions_by_name_action_admin():
+    competitions = get_all_competitions_by_alphabet()
+    return render_template('adminPage.html', competitions=competitions)
+
+@auth_views.route('/sort_competitions_by_date_action_admin', methods=['GET', 'POST'])
+def sort_competitions_by_date_action_admin():
+    competitions = get_all_competitions_by_start_date()
+    return render_template('adminPage.html', competitions=competitions)  
+
+@auth_views.route('/sort_competitions_by_name_action', methods=['GET', 'POST'])
+def sort_competitions_by_name_action():
+    competitions = get_all_competitions_by_alphabet()
+    return render_template('competitionsPage.html', competitions=competitions)
+
+@auth_views.route('/sort_competitions_by_date_action', methods=['GET', 'POST'])
+def sort_competitions_by_date_action():
+    competitions = get_all_competitions_by_start_date()
+    return render_template('competitionsPage.html', competitions=competitions) 
+   
+@auth_views.route('/render_createCompetitionsPage', methods=['GET'])
+def render_createCompetitionsPage():
+    return render_template('createCompetitionsPage.html') 
+
+
+
+@auth_views.route('/upload', methods=['POST'])
+def upload():
+    comp_name = request.form['compName']
+    start_date = datetime.strptime(request.form['startDate'], '%Y-%m-%d').date()
+    end_date = datetime.strptime(request.form['endDate'], '%Y-%m-%d').date()
+
+    csv_file = request.files['csvFile']
+    if csv_file and allowed_file(csv_file.filename):
+        filename = csv_file.filename
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        csv_file.save(file_path)
+        process_csv_file(file_path, comp_name, start_date, end_date)
+        return "File uploaded successfully"
+    else:
+        return "Error uploading file"
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] == 'csv'
+
+def process_csv_file(file_path, comp_name, start_date, end_date):
+    admin_id = 1  
+    competition = Competition(admin_id, comp_name, start_date, end_date)
+    db.session.add(competition)
+    db.session.flush()
+
+    with open(file_path) as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+
+        for row in csv_reader:
+            team_name = row['Team']
+            score = row['Score']
+            team = Team(competition.id, admin_id, team_name, score)
+            db.session.add(team)
+            db.session.flush()
+
+            participants = row['Participants'].split(", ")
+            for participant in participants:
+                member = Member(team.id, admin_id, participant)
+                db.session.add(member)
+
+    db.session.commit()
+
+@auth_views.route('/delete_competition/<int:comp_id>', methods=['POST'])
+def delete_competition(comp_id):
+    # Check for CSRF token
+    try:
+        validate_csrf(request.form.get('csrf_token'))
+    except ValidationError:
+        return abort(400)
+
+    competition = Competition.query.filter_by(id=comp_id).first()
+    if competition:
+        db.session.delete(competition)
+        db.session.commit()
+
+        # Delete the CSV file for the competition
+        csv_file_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{comp_id}.csv")
+        if os.path.exists(csv_file_path):
+            os.remove(csv_file_path)
+
+        return f"Competition with ID {comp_id} deleted successfully"
+    else:
+        return f"Competition with ID {comp_id} not found"
+
 
 
 '''

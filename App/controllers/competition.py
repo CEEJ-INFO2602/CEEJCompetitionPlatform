@@ -33,6 +33,11 @@ def get_competition_by_name(name):
     competition = Competition.query.filter_by(name = name).first()
     return competition
 
+#Function to get competitions in alphabetical order
+def get_all_competitions_by_alphabet():
+    competitions = Competition.query.order_by(Competition.compName).all()
+    return competitions
+
 #Function to get competition by name in json format
 def get_competition_by_name_json(name):
     competitions = Competition.query.filter_by(name = name).first()
@@ -47,6 +52,11 @@ def get_start_date(id):
 def get_end_date(id):
     competition = Competition.query.get(id)
     return competition.endDate
+
+#Function to order competitions by start date
+def get_all_competitions_by_start_date():
+    competitions = Competition.query.order_by(Competition.startDate).all()
+    return competitions
 
 def update_competition(id,adminId,compName,startDate,endDate):
     competition = get_competition_by_id(id)

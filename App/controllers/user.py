@@ -5,7 +5,7 @@ def get_active_user():
     allUsers = User.query.all()
     for u in allUsers:
         if (u.is_active == True):
-            return u.username
+            return u
     return "no hehe"
 
 def create_user(username, password, access ="user"):
@@ -17,8 +17,14 @@ def create_user(username, password, access ="user"):
     db.session.commit()
     return new_user
 
-def create_admin(username, password):
-    return create_user(username, password, "admin")
+def create_admin(username, password, access ="admin"):
+    user = get_user_by_username(username)
+    if user:
+        return None
+    new_user = User(username = username, password = password, access = access)
+    db.session.add(new_user)
+    db.session.commit()
+    return new_user
 
 def update_access(id, access):
     user = get_user_by_id(id)
