@@ -28,7 +28,9 @@ from App.controllers import (
     get_teams_by_alphabet,
     get_teams_by_score,
     delete_competition,
-    update_competition
+    update_competition,
+    get_all_users,
+    get_active_user
 )
 
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
@@ -110,7 +112,7 @@ def signUp_action():
 
         return redirect('/render_competitionsPage')
 
-    flask('ERROR SIGNING UP!')
+    flash('ERROR SIGNING UP!')
     return render_template('signUpPage.html'), 401
 
 
@@ -307,3 +309,12 @@ def user_login_api():
 @jwt_required()
 def identify_user_action():
     return jsonify({'message': f"username: {jwt_current_user.username}, id : {jwt_current_user.id}"})
+
+@auth_views.route("/api/users/<int:id>", methods=["DELETE"])
+@jwt_required()
+def delete_user_action(id):
+    user = get_user(id)
+    if user:
+        delete_user(id)
+        return jsonify({"message": "User deleted"}), 200
+    return jsonify({"message": "User not found"}), 404
