@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block title %}CEEJ Admin Login Page{% endblock %}
+{% block page %}Admin Login Page{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+  <div class="space"></div>
+  <div class="login-container">
+    <div class="center">
+      <img src="../static/images/adminloginpexels-thisisengineering-3862132.jpg" alt="Admin Login Image">
+    </div>
+    <div class="login-right">
+        <h1>Admin Login</h1>
+      <!-- Add the "action" and "method" attributes to the form tag -->
+      <form action="{{ url_for('auth_views.admin_login_action') }}" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+      
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        
+        {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flashes">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+
+        <input type="submit" value="Login">
+      
+        <div class="login_signup_button">
+          <div class="text">Don't have an account?</div>
+          <a href="{{ url_for('auth_views.render_signUp') }}">SignUp</a>
+        </div>
+      </form>      
+    </div>
+  </div>
+{% endblock %}
