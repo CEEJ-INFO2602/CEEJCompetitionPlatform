@@ -11,7 +11,7 @@
 			<img src="../static/images/createcompspexels-cottonbro-studio-4709291.jpg" alt="Create Competitions Image">
 		</div>
 		<div class="login-right">
-			<form method="POST" href="/update_competition/{{competition_id}}"  enctype="multipart/form-data">
+			<form method="POST" action="/update_competition/{{competition_id}}"  enctype="multipart/form-data">
 				<label for="CompName">Competition Name:</label>
 				<input type="text" id="CompName" name="compName" placeholder="Enter a Competition Name">
         
@@ -22,8 +22,6 @@
 				<input type="date" id="endDate" name="endDate" placeholder="Enter an End Date">
         
 				<input type="submit" value="Update Competition">
-        <div class="login_signup_button">
-        </div>
 			</form>
 		</div>
 	</div>
