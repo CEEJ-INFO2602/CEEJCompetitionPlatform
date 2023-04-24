@@ -24,7 +24,7 @@ def get_teams_by_alphabet_json():
     return [team.to_json() for team in get_teams()]
 
 def get_teams_by_score():
-    return Team.query.order_by(-Team.score).all()
+    return Team.query.order_by(Team.score).all()
 
 def get_teams_by_score_json():
     return [team.to_json() for team in get_teams_by_score()]
