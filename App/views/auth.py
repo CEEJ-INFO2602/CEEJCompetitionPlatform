@@ -55,6 +55,10 @@ def identify_page():
 def render_login():
     return render_template('loginPage.html')
 
+@auth_views.route('/render_admin_login', methods=['GET'])
+def render_admin_login():
+    return render_template('adminLoginPage.html')
+
 @auth_views.route('/login_action', methods=['GET', 'POST'])
 def login_action():
     data = request.form
@@ -63,12 +67,23 @@ def login_action():
         login_user(user)
         set_active_true(user)
 
-        if is_admin(user):
-            return redirect('/render_adminPage')
-
         return redirect('/render_competitionsPage')
     
     flash('bad username or password given')
+    return render_template('loginPage.html'), 401
+
+@auth_views.route('/admin_login_action', methods=['GET', 'POST'])
+def admin_login_action():
+    data = request.form
+    if data['username'] == 'bob' and data['password'] == 'bobpass':
+        user = login(data['username'], data['password'])
+        if user:
+            login_user(user)
+            set_active_true(user)
+
+        return redirect('/render_adminPage')
+    
+    flash('Not Admin Credentials!!!!')
     return render_template('loginPage.html'), 401
 
 @auth_views.route('/logout_action')
