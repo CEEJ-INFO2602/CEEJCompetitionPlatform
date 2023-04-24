@@ -36,20 +36,19 @@ def initialize():
     if  os.path.exists(csv_file_path):
         process_csv_file(csv_file_path, comp_name, start_date, end_date)
 
-    comp_name = 'Colors competition'
-    start_date = datetime.strptime('23/04/2023', '%d/%m/%Y').date()
-    end_date = datetime.strptime('23/05/2023', '%d/%m/%Y').date()
-    csv_file_path = os.path.join(UPLOAD_FOLDER, 'Colors competition.csv')
-    if  os.path.exists(csv_file_path):
-        process_csv_file(csv_file_path, comp_name, start_date, end_date)
-
     comp_name = 'IT competition'
-    start_date = datetime.strptime('23/04/2023', '%d/%m/%Y').date()
-    end_date = datetime.strptime('23/05/2023', '%d/%m/%Y').date()
+    start_date = datetime.strptime('23/07/2023', '%d/%m/%Y').date()
+    end_date = datetime.strptime('23/08/2023', '%d/%m/%Y').date()
     csv_file_path = os.path.join(UPLOAD_FOLDER, 'IT competition.csv')
     if  os.path.exists(csv_file_path):
         process_csv_file(csv_file_path, comp_name, start_date, end_date)
 
+    comp_name = 'Colors competition'
+    start_date = datetime.strptime('23/02/2023', '%d/%m/%Y').date()
+    end_date = datetime.strptime('23/03/2023', '%d/%m/%Y').date()
+    csv_file_path = os.path.join(UPLOAD_FOLDER, 'Colors competition.csv')
+    if  os.path.exists(csv_file_path):
+        process_csv_file(csv_file_path, comp_name, start_date, end_date)
 
 def process_csv_file(file_path, comp_name, start_date, end_date):
     admin_id = 1  
