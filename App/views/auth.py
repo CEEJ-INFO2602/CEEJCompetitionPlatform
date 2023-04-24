@@ -61,9 +61,9 @@ def login_action():
         set_active_true(user)
 
         if is_admin(user):
-            return redirect('/render_adminPage'), 200
+            return redirect('/render_adminPage')
 
-        return redirect('/render_competitionsPage'), 200
+        return redirect('/render_competitionsPage')
     
     flash('bad username or password given')
     return render_template('loginPage.html'), 401
@@ -105,17 +105,12 @@ def signUp_action():
         set_active_true(user)
 
         if is_admin(user):
-            return redirect('/render_adminPage'), 200
+            return redirect('/render_adminPage')
 
-        return redirect('/render_competitionsPage'), 200
+        return redirect('/render_competitionsPage')
 
     flask('ERROR SIGNING UP!')
     return render_template('signUpPage.html'), 401
-
-@auth_views.route('/active_user', methods=['GET', 'POST'])
-def active_user():
-    username = get_active_user()
-    return username
 
 
 @auth_views.route('/render_competitionsPage', methods=['GET', 'POST'])
@@ -154,6 +149,10 @@ def render_createCompetitionsPage():
     return render_template('createCompetitionsPage.html') 
 
 
+@auth_views.route('/active_user', methods=['GET', 'POST'])
+def active_user():
+    username = get_active_user()
+    return username
 
 @auth_views.route('/upload', methods=['POST'])
 def upload():
@@ -167,7 +166,9 @@ def upload():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         csv_file.save(file_path)
         process_csv_file(file_path, comp_name, start_date, end_date)
-        return "File uploaded successfully"
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        return redirect('/render_adminPage')
     else:
         return "Error uploading file"
 
@@ -187,12 +188,17 @@ def process_csv_file(file_path, comp_name, start_date, end_date):
         for row in csv_reader:
             team_name = row['Team']
             score = row['Score']
-            members = members['Participants']
+            members = row['Participants']
             team = Team(competition.id, admin_id, team_name, score, members)
             db.session.add(team)
             db.session.flush()
 
     db.session.commit()
+
+@auth_views.route('/update_competition/<int:competition_id>', methods=['GET', 'POST'])
+def update_competition(competition_id):
+    delete_competition(competition_id)
+    return redirect(url_for('auth_views.render_createCompetitionsPage'))
 
 @auth_views.route('/delete_competition/<int:competition_id>', methods=['GET', 'POST'])
 def delete_competition(competition_id):
