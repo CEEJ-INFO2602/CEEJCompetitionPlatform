@@ -187,12 +187,17 @@ def process_csv_file(file_path, comp_name, start_date, end_date):
         for row in csv_reader:
             team_name = row['Team']
             score = row['Score']
-            members = members['Participants']
+            members = row['Participants']
             team = Team(competition.id, admin_id, team_name, score, members)
             db.session.add(team)
             db.session.flush()
 
     db.session.commit()
+
+@auth_views.route('/update_competition/<int:competition_id>', methods=['GET', 'POST'])
+def update_competition(competition_id):
+    delete_competition(competition_id)
+    return redirect(url_for('auth_views.render_createCompetitionsPage'))
 
 @auth_views.route('/delete_competition/<int:competition_id>', methods=['GET', 'POST'])
 def delete_competition(competition_id):
