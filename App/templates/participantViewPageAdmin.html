@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %}CEEJ Competitions Page{% endblock %}
+{% block page %}Competitions Page{% endblock %}
+
+{{ super() }}
+
+{% block content %}
+<!-- index.html -->
+  <!-- Add the Competitions span under the nav bar -->
+  <div class="competitionspan">
+    <span>{{team.teamName}} ({{team.score}})</span>
+  </div>
+  <div class="sidebar">
+        <!-- Add your sidebar content here -->
+        <ul>
+          <li class="usernameSidebar"><a href="{{ url_for('auth_views.render_adminPage') }}">Home</a></li>
+          <li class="logoutSidebar"><a href="{{ url_for('auth_views.logout_action') }}">Logout</a></li>
+        </ul>
+  </div>
+  <div class="contents" id="table-container">
+    <!-- Table will be dynamically appended here -->
+    <table>
+      <thead>
+        <tr>
+          <th>Player Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{team.members}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
+    
+{% endblock %}

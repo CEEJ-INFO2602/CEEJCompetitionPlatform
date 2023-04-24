@@ -19,7 +19,7 @@
   <div class="sidebar">
         <!-- Add your sidebar content here -->
         <ul>
-          <li class="usernameSidebar"><a href="{{ url_for('auth_views.render_competitionsPage') }}">Home</a></li> 
+          <li class="usernameSidebar"><a href="{{ url_for('auth_views.render_adminPage') }}">Home</a></li> 
           <li class="logoutSidebar"><a href="{{ url_for('auth_views.logout_action') }}">Logout</a></li>
         </ul>
   </div>
@@ -35,7 +35,7 @@
       <tbody>
       {%for t in teams%}
         <tr>
-            <td><a class = "viewTeamButton"href="/participantViewPage/{{ t.id }}">{{t.teamName}}</a></td>
+            <td><a class = "viewTeamButton"href="/participantViewPageAdmin/{{ t.id }}">{{t.teamName}}</a></td>
             <td>{{t.score}}</td>
         </tr>
       {%endfor%}

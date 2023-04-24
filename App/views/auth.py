@@ -24,7 +24,9 @@ from App.controllers import (
     get_all_competitions,
     is_admin,
     get_all_competitions_by_alphabet,
-    get_all_competitions_by_start_date
+    get_all_competitions_by_start_date,
+    get_teams_by_alphabet,
+    get_teams_by_score
 )
 
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
@@ -219,10 +221,31 @@ def teamViewPage(competition_id):
     teams = competition.teams
     return render_template('teamViewPage.html', teams=teams)
 
+@auth_views.route('/teamViewPageAdmin/<int:competition_id>')
+def teamViewPageAdmin(competition_id):
+    competition = Competition.query.filter_by(id=competition_id).first()
+    teams = competition.teams
+    return render_template('teamViewPageAdmin.html', teams=teams)
+
+@auth_views.route('/sort_teams_by_name_action', methods=['GET', 'POST'])
+def sort_teams_by_name_action():
+    teams = get_teams_by_alphabet()
+    return render_template('teamViewPage.html', teams=teams)
+
+@auth_views.route('/sort_teams_by_score_action', methods=['GET', 'POST'])
+def sort_teams_by_date_action():
+    teams = get_teams_by_score()
+    return render_template('teamViewPage.html', teams=teams) 
+
 @auth_views.route('/participantViewPage/<int:team_id>')
 def participantViewPage(team_id):
     team = Team.query.filter_by(id=team_id).first()
     return render_template('participantViewPage.html', team=team)
+
+@auth_views.route('/participantViewPageAdmin/<int:team_id>')
+def participantViewPageAdmin(team_id):
+    team = Team.query.filter_by(id=team_id).first()
+    return render_template('participantViewPageAdmin.html', team=team)
 
 '''
 API Routes
