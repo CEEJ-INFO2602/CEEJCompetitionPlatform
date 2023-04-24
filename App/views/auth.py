@@ -275,3 +275,12 @@ def user_login_api():
 @jwt_required()
 def identify_user_action():
     return jsonify({'message': f"username: {jwt_current_user.username}, id : {jwt_current_user.id}"})
+
+@auth_views.route("/api/users/<int:id>", methods=["DELETE"])
+@jwt_required()
+def delete_user_action(id):
+    user = get_user(id)
+    if user:
+        delete_user(id)
+        return jsonify({"message": "User deleted"}), 200
+    return jsonify({"message": "User not found"}), 404
