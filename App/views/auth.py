@@ -110,7 +110,7 @@ def signUp_action():
 
         return redirect('/render_competitionsPage')
 
-    flask('ERROR SIGNING UP!')
+    flash('ERROR SIGNING UP!')
     return render_template('signUpPage.html'), 401
 
 
