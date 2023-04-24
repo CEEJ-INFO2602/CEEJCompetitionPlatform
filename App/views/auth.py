@@ -194,13 +194,16 @@ def process_csv_file(file_path, comp_name, start_date, end_date):
 
     db.session.commit()
 
-@auth_views.route('/delete_competition/<int:comp_id>', methods=['POST'])
-def delete_competition(comp_id):
-    # Check for CSRF token
-    try:
-        validate_csrf(request.form.get('csrf_token'))
-    except ValidationError:
-        return abort(400)
+@auth_views.route('/delete_competition/<int:competition_id>', methods=['GET', 'POST'])
+def delete_competition(competition_id):
+    competition = Competition.query.filter_by(id=competition_id).first()
+    if competition:
+        db.session.delete(competition)
+        db.session.commit()
+        flash('Competition successfully deleted.')
+        return redirect(url_for('auth_views.render_adminPage'))
+    flash('Failed to delete competition.')
+    return redirect(url_for('auth_views.render_adminPage'))
 
     competition = Competition.query.filter_by(id=comp_id).first()
     if competition:
