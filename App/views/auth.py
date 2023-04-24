@@ -62,9 +62,9 @@ def login_action():
         set_active_true(user)
 
         if is_admin(user):
-            return redirect('/render_adminPage'), 200
+            return redirect('/render_adminPage')
 
-        return redirect('/render_competitionsPage'), 200
+        return redirect('/render_competitionsPage')
     
     flash('bad username or password given')
     return render_template('loginPage.html'), 401
@@ -106,9 +106,9 @@ def signUp_action():
         set_active_true(user)
 
         if is_admin(user):
-            return redirect('/render_adminPage'), 200
+            return redirect('/render_adminPage')
 
-        return redirect('/render_competitionsPage'), 200
+        return redirect('/render_competitionsPage')
 
     flask('ERROR SIGNING UP!')
     return render_template('signUpPage.html'), 401
@@ -154,6 +154,10 @@ def render_updateCompetitionsPage(competition_id):
     return render_template('updateCompetitionsPage.html', competition_id = competition_id)
 
 
+@auth_views.route('/active_user', methods=['GET', 'POST'])
+def active_user():
+    username = get_active_user()
+    return username
 
 @auth_views.route('/upload', methods=['POST'])
 def upload():
@@ -169,7 +173,7 @@ def upload():
         process_csv_file(file_path, comp_name, start_date, end_date)
         if os.path.exists(file_path):
             os.remove(file_path)
-        return "File uploaded successfully"
+        return redirect('/render_adminPage')
     else:
         return "Error uploading file"
 
