@@ -37,7 +37,7 @@
           <p>Competition End Date: {{ c.endDate }}</p>
         </div>
         <div class="card-right">
-          <a class="competition-buttons1" type="submit" href="/update_competition/{{c.id}}">Update Competition</a>
+          <a class="competition-buttons1" type="submit" href="{{url_for ('auth_views.render_updateCompetitionsPage', competition_id=c.id)}}">Update Competition</a>
           <a class="competition-buttons2" type="submit" href="/delete_competition/{{c.id}}">Delete Competition</a>
         </div>
       </div>

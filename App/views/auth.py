@@ -27,7 +27,8 @@ from App.controllers import (
     get_all_competitions_by_start_date,
     get_teams_by_alphabet,
     get_teams_by_score,
-    delete_competition
+    delete_competition,
+    update_competition
 )
 
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
@@ -148,6 +149,10 @@ def sort_competitions_by_date_action():
 def render_createCompetitionsPage():
     return render_template('createCompetitionsPage.html') 
 
+@auth_views.route('/render_updateCompetitionsPage/<int:competition_id>', methods=['GET'])
+def render_updateCompetitionsPage(competition_id):
+    return render_template('updateCompetitionsPage.html', competition_id = competition_id)
+
 
 
 @auth_views.route('/upload', methods=['POST'])
@@ -191,10 +196,22 @@ def process_csv_file(file_path, comp_name, start_date, end_date):
 
     db.session.commit()
 
-@auth_views.route('/update_competition/<int:competition_id>', methods=['GET', 'POST'])
-def update_competition(competition_id):
-    delete_competition(competition_id)
-    return redirect(url_for('auth_views.render_createCompetitionsPage'))
+# @auth_views.route('/update_competition/<int:competition_id>', methods=['GET', 'POST'])
+# def update_competition(competition_id):
+#     delete_competition(competition_id)
+#     return redirect(url_for('auth_views.render_createCompetitionsPage'))
+
+@auth_views.route('/update_competition/<int:competition_id>', methods=['POST'])
+def update_Competition(competition_id):
+    competition = Competition.query.filter_by(id=competition_id).first()
+    if competition:
+        competition.comp_name = request.form['compName']
+        competition.start_date = datetime.strptime(request.form['startDate'], '%Y-%m-%d').date()
+        competition.end_date = datetime.strptime(request.form['endDate'], '%Y-%m-%d').date()
+        db.session.commit()
+        db.session.flush()
+        return redirect(url_for('auth_views.render_adminPage'))
+    return("Error")
 
 @auth_views.route('/delete_competition/<int:competition_id>', methods=['GET', 'POST'])
 def delete_competition(competition_id):
