@@ -28,7 +28,9 @@ from App.controllers import (
     get_teams_by_alphabet,
     get_teams_by_score,
     delete_competition,
-    update_competition
+    update_competition,
+    get_all_users,
+    get_active_user
 )
 
 auth_views = Blueprint('auth_views', __name__, template_folder='../templates')
