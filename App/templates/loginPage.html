@@ -34,7 +34,11 @@
         <div class="login_signup_button">
           <div class="text">Don't have an account?</div>
           <a href="{{ url_for('auth_views.render_signUp') }}">SignUp</a>
+          <div class="text">Are you an admin?</div>
+          <a href="{{ url_for('auth_views.render_admin_login') }}">Admin login</a>
         </div>
+
+        
       </form>      
     </div>
   </div>
