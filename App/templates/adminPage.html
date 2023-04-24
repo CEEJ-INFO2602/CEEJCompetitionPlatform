@@ -14,10 +14,7 @@
     <a class="filter-buttons2" href ="/sort_competitions_by_date_action_admin">Date</a>
     <a class="filter-buttons2" href="{{ url_for('auth_views.render_createCompetitionsPage') }}">Add Competition</a>
   </div> 
-  <div>
-      <input type="text" class="search-bar" placeholder="Search">
-      <button class="searchButton">Search</button>
-  </div>
+
   <div class="sidebar">
     <!-- Add your sidebar content here -->
     <ul>
@@ -28,7 +25,7 @@
   <div class="content" id="card-container">
     <!-- Cards will be dynamically appended here -->
     {% for c in competitions %}
-    <a href="/teamViewPage/{{ c.id }}" class="card">
+    <a href="/teamViewPageAdmin/{{ c.id }}" class="card">
       <div class="card-text">
         <div class="card-left">
           <h3>Competition Code: {{ c.compName }}</h3>
@@ -36,12 +33,13 @@
           <p>Competition Start Date: {{ c.startDate }}</p>
           <p>Competition End Date: {{ c.endDate }}</p>
         </div>
-        <div class="card-right">
-          <a class="competition-buttons1" type="submit" href="/update_competition/{{c.id}}">Update Competition</a>
-          <a class="competition-buttons2" type="submit" href="/delete_competition/{{c.id}}">Delete Competition</a>
-        </div>
+        <div class="card-right"></div>
       </div>
     </a>
+    <div class="card">
+      <a class="competition-buttons1" type="submit" href="/update_competition/{{c.id}}">Update Competition</a>
+      <a class="competition-buttons2" type="submit" href="/delete_competition/{{c.id}}">Delete Competition</a>
+    </div>
   {% endfor %}
   
   </div>
