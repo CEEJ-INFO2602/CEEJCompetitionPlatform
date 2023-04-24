@@ -200,9 +200,7 @@ def delete_competition(competition_id):
     if competition:
         db.session.delete(competition)
         db.session.commit()
-        flash('Competition successfully deleted.')
         return redirect(url_for('auth_views.render_adminPage'))
-    flash('Failed to delete competition.')
     return redirect(url_for('auth_views.render_adminPage'))
 
     competition = Competition.query.filter_by(id=comp_id).first()
