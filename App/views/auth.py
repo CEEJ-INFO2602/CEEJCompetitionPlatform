@@ -200,22 +200,30 @@ def process_csv_file(file_path, comp_name, start_date, end_date):
 
     db.session.commit()
 
-# @auth_views.route('/update_competition/<int:competition_id>', methods=['GET', 'POST'])
-# def update_competition(competition_id):
-#     delete_competition(competition_id)
-#     return redirect(url_for('auth_views.render_createCompetitionsPage'))
+@auth_views.route('/update_competition/<int:competition_id>', methods=['GET', 'POST'])
+def update_competition(competition_id):
+    delete_competition(competition_id)
+    return redirect(url_for('auth_views.render_createCompetitionsPage'))
 
-@auth_views.route('/update_competition/<int:competition_id>', methods=['POST'])
-def update_Competition(competition_id):
-    competition = Competition.query.filter_by(id=competition_id).first()
-    if competition:
-        competition.comp_name = request.form['compName']
-        competition.start_date = datetime.strptime(request.form['startDate'], '%Y-%m-%d').date()
-        competition.end_date = datetime.strptime(request.form['endDate'], '%Y-%m-%d').date()
-        db.session.commit()
-        db.session.flush()
-        return redirect(url_for('auth_views.render_adminPage'))
-    return("Error")
+# @auth_views.route('/update_competition/<int:competition_id>', methods=['GET', 'POST'])
+# def update_Competition(competition_id):
+#     comp_name = request.form['compName']
+#     start_date = datetime.strptime(request.form['startDate'], '%Y-%m-%d').date()
+#     end_date = datetime.strptime(request.form['endDate'], '%Y-%m-%d').date()
+#     update_Competition_action(comp_name, start_date, end_date)
+    
+
+# def update_Competition_action(comp_name, start_date, end_date):
+#     competition = Competition.query.filter_by(id=competition_id).first()
+#     if competition:
+#         competition.compName = comp_Name
+#         competition.startDate = star_tDate
+#         competition.endDate = end_Date
+#         db.session.commit()
+#         db.session.flush()
+#         return redirect(url_for('auth_views.render_adminPage'))
+#     return redirect(url_for('auth_views.render_adminPage'))
+
 
 @auth_views.route('/delete_competition/<int:competition_id>', methods=['GET', 'POST'])
 def delete_competition(competition_id):
