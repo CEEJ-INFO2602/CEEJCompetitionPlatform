@@ -28,7 +28,7 @@
   <div class="content" id="card-container">
     <!-- Cards will be dynamically appended here -->
     {% for c in competitions %}
-    <a href="/teamViewPage/{{ c.id }}" class="card">
+    <a href="/teamViewPageAdmin/{{ c.id }}" class="card">
       <div class="card-text">
         <div class="card-left">
           <h3>Competition Code: {{ c.compName }}</h3>
@@ -37,8 +37,8 @@
           <p>Competition End Date: {{ c.endDate }}</p>
         </div>
         <div class="card-right">
-          <button class="competition-buttons1">Update Competition</button>
-          <button class="competition-buttons2" type="submit">Delete Competition</button>
+          <!-- <button class="competition-buttons1">Update Competition</button> -->
+          <button class="competition-buttons1" type="submit">Delete Competition</button>
         </div>
       </div>
     </a>

@@ -10,14 +10,10 @@
   <div class="competitionspan">
     <span>{{team.teamName}} ({{team.score}})</span>
   </div>
-  <div>
-      <input type="text" class="search-bar" placeholder="Search">
-      <button class="searchButton">Search</button>
-  </div>
   <div class="sidebar">
         <!-- Add your sidebar content here -->
         <ul>
-          <li class="usernameSidebar"><a href="{{ url_for('auth_views.render_competitionsPage') }}">Home</a></li>
+          <li class="usernameSidebar"><a href="{{ url_for('auth_views.render_adminPage') }}">Home</a></li>
           <li class="logoutSidebar"><a href="{{ url_for('auth_views.logout_action') }}">Logout</a></li>
         </ul>
   </div>
