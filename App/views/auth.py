@@ -26,6 +26,7 @@ from App.controllers import (
     get_all_competitions_by_alphabet,
     get_all_competitions_by_start_date,
     get_teams_by_alphabet,
+    get_teams_by_score,
     delete_competition,
     update_competition,
     get_all_users,
@@ -279,6 +280,11 @@ def teamViewPageAdmin(competition_id):
 @auth_views.route('/sort_teams_by_name_action', methods=['GET', 'POST'])
 def sort_teams_by_name_action():
     teams = get_teams_by_alphabet()
+    return render_template('teamViewPage.html', teams=teams)
+
+@auth_views.route('/sort_teams_by_score_action', methods=['GET', 'POST'])
+def sort_teams_by_date_action():
+    teams = get_teams_by_score()
     return render_template('teamViewPage.html', teams=teams)
 
 @auth_views.route('/participantViewPage/<int:team_id>')
